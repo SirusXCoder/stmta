@@ -135,6 +135,7 @@ func (t *Todos) GetAll() ([]item, error) {
 }
 
 // Print displays all tasks in the terminal
+
 func (t *Todos) Print() error {
 	clearTerminal()
 
@@ -194,8 +195,14 @@ func (t *Todos) Print() error {
 	}
 	table.Body = &simpletable.Body{Cells: cells}
 
+	// Handle CountPending error
+	countPending, err := t.CountPending()
+	if err != nil {
+		return err
+	}
+
 	table.Footer = &simpletable.Footer{Cells: []*simpletable.Cell{
-		{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("You have %d pending todos", t.CountPending()))},
+		{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("You have %d pending todos", countPending))},
 	}}
 
 	table.SetStyle(simpletable.StyleUnicode)
